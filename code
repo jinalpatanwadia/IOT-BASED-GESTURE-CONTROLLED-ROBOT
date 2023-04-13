@@ -1,0 +1,73 @@
+
+
+#include "ThingSpeak.h"
+
+
+
+      #include <ESP8266WIFI.h>
+    
+    char ssid[] = "Connectify-1";    //  your network SSID (name) 
+    char pass[] = "12345678";   // your network password
+    int status = WL_IDLE_STATUS;
+    WiFiClient  client;
+  
+int leftforward=4;
+int leftbackward=2;
+int rightforward=5;
+int rightbackward=16;
+unsigned long myChannelNumber = ;
+const char * myReadAPIKey = "";
+
+void setup() {
+ pinMode(leftforward,OUTPUT);
+pinMode(leftbackward,OUTPUT);
+pinMode(rightforward,OUTPUT);
+pinMode(rightbackward,OUTPUT);
+digitalWrite(leftforward,LOW);
+        digitalWrite(rightforward,LOW);
+        digitalWrite(leftbackward,LOW);
+        digitalWrite(rightbackward,LOW);
+  Serial.begin(9600);
+   WiFi.begin(ssid, pass);
+   ThingSpeak.begin(client);
+}
+
+void loop() {
+  // Read the latest value from field 1 of channel 31461
+  int data= ThingSpeak.readIntField(myChannelNumber, 1, myReadAPIKey);
+  
+  Serial.print("Latest voltage is: "); 
+  Serial.print(data);
+  Serial.println("V");
+  if(data==1)
+      {
+        digitalWrite(leftforward,HIGH);
+        digitalWrite(rightforward,HIGH);
+        digitalWrite(leftbackward,LOW);
+        digitalWrite(rightbackward,LOW);
+      }
+      else if(data==2)
+      {
+        digitalWrite(leftforward,HIGH);
+        digitalWrite(rightforward,LOW);
+        digitalWrite(leftbackward,LOW);
+        digitalWrite(rightbackward,HIGH);
+      }
+      else if(data==3)
+      {
+        digitalWrite(leftforward,LOW);
+        digitalWrite(rightforward,HIGH);
+        digitalWrite(leftbackward,HIGH);
+        digitalWrite(rightbackward,LOW);
+      }
+      else if(data==4)
+      {
+        digitalWrite(leftforward,LOW);
+        digitalWrite(rightforward,LOW);
+        digitalWrite(leftbackward,HIGH);
+        digitalWrite(rightbackward,HIGH);
+      }
+   
+
+  
+}
